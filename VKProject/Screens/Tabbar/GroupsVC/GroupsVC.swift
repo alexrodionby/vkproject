@@ -7,38 +7,28 @@
 
 import UIKit
 import SDWebImage
-import RealmSwift
 
 class GroupsVC: UIViewController {
     
     @IBOutlet weak var groupsTable: UITableView!
     
-    var groups: [GroupDAO] = []
-    var groupsDatabase = GroupsDB()
+    var groups: [GroupModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let groupsFromDB = Array(groupsDatabase.fetch())
-        
-        if groupsFromDB.count > 0 {
-            self.groups = groupsFromDB
-            self.groupsTable.reloadData()
-            
-        } else {
-            
-            APIManager.shared.getGroups { [weak self] groups in
-                guard let self = self else { return }
-                self.groups = groups
-                self.groupsDatabase.save(groups)
-                DispatchQueue.main.async {
-                    print("Релоадит дату в таблице")
-                    self.groupsTable.reloadData()
-                }
+        APIManager.shared.getGroups { [weak self] groups in
+            guard let self = self else { return }
+            self.groups = groups
+            DispatchQueue.main.async {
+                print("Релоадит дату в таблице")
+                self.groupsTable.reloadData()
             }
         }
+        print(groups)
     }
 }
+
 
 extension GroupsVC: UITableViewDataSource {
     

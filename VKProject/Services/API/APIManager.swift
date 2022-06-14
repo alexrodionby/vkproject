@@ -27,7 +27,7 @@ final class APIManager {
         }()
         
         urlComponents.queryItems = [
-            URLQueryItem(name: "user_id", value: "\(Session.shared.userId)"),
+            URLQueryItem(name: "user_id", value: Session.shared.userId),
           //  URLQueryItem(name: "order", value: "hints"),
             URLQueryItem(name: "order", value: "random"),
             URLQueryItem(name: "count", value: "20"),
@@ -74,7 +74,7 @@ final class APIManager {
         }()
         
         urlComponents.queryItems = [
-            URLQueryItem(name: "owner_id", value: "\(Session.shared.userId)"),
+            URLQueryItem(name: "owner_id", value: Session.shared.userId),
             URLQueryItem(name: "extended", value: "0"),
             URLQueryItem(name: "count", value: "30"),
             URLQueryItem(name: "photo_sizes", value: "1"),
@@ -122,7 +122,7 @@ final class APIManager {
         }()
         
         urlComponents.queryItems = [
-            URLQueryItem(name: "user_ids", value: "\(Session.shared.userId)"),
+            URLQueryItem(name: "user_ids", value: Session.shared.userId),
             URLQueryItem(name: "fields", value: "about,bdate,city,country,photo_200,online,photo_id"),
             URLQueryItem(name: "access_token", value: Session.shared.token),
             URLQueryItem(name: "v", value: "5.131")
@@ -153,7 +153,7 @@ final class APIManager {
     
     //MARK: - getGroups
     
-    func getGroups(completion: @escaping ([GroupDAO])->()) {
+    func getGroups(completion: @escaping ([GroupModel])->()) {
         
         var urlComponents: URLComponents = {
             var urlComponents = URLComponents()
@@ -164,10 +164,10 @@ final class APIManager {
         }()
         
         urlComponents.queryItems = [
-            URLQueryItem(name: "user_ids", value: "\(Session.shared.userId)"),
+            URLQueryItem(name: "user_ids", value: Session.shared.userId),
             URLQueryItem(name: "extended", value: "1"),
             URLQueryItem(name: "fields", value: "city,country,description,members_count,site"),
-            URLQueryItem(name: "count", value: "10"),
+            URLQueryItem(name: "count", value: "6"),
             URLQueryItem(name: "offset", value: "0"),
             URLQueryItem(name: "access_token", value: Session.shared.token),
             URLQueryItem(name: "v", value: "5.131")
@@ -185,7 +185,7 @@ final class APIManager {
             print(data.prettyJSON as Any)
             do {
                 let groupsResponse = try JSONDecoder().decode(GroupsResponse.self, from: data)
-                let groups: [GroupDAO] = groupsResponse.response?.items ?? []
+                let groups: [GroupModel] = groupsResponse.response?.items ?? []
                 DispatchQueue.main.async {
                     print("на комплишене groups = ", groups)
                     completion(groups)

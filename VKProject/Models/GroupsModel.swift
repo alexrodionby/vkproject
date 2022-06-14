@@ -10,7 +10,6 @@
 //   let groupsResponse = try? newJSONDecoder().decode(GroupsResponse.self, from: jsonData)
 
 import Foundation
-import RealmSwift
 
 // MARK: - GroupsResponse
 struct GroupsResponse: Codable {
@@ -20,31 +19,23 @@ struct GroupsResponse: Codable {
 // MARK: - Response
 struct GroupsItem: Codable {
     let count: Int?
-    let items: [GroupDAO]?
+    let items: [GroupModel]?
 }
 
 // MARK: - Item
-@objcMembers
-//DAO - Data access object
-class GroupDAO: Object, Codable {
-    
-    dynamic var groupId: Int?
-    dynamic var itemDescription: String?
-    dynamic var name: String?
-    dynamic var photo200: String?
-    
-  
-
+struct GroupModel: Codable {
+    let id: Int?
+    let itemDescription: String?
     let membersCount: Int?
     let site: String?
-    let screenName: String?
+    let name, screenName: String?
     let isClosed: Int?
     let type: TypeEnum?
-    let photo50, photo100: String?
+    let photo50, photo100, photo200: String?
     let country, city: City3?
 
     enum CodingKeys: String, CodingKey {
-        case groupId = "id"
+        case id
         case itemDescription = "description"
         case membersCount = "members_count"
         case site, name
