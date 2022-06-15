@@ -20,14 +20,31 @@ class AuthorizationVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationItem.hidesBackButton = true
-        if Session.shared.showLoginScreen {
-            setupViews()
-            AuthorizationToVK()
-        } else {
+        
+        setupViews()
+        
+        if Session.isValid {
+            
             let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
             let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")
             self.navigationController?.pushViewController(tabbarVC, animated: false)
+            
+            return
         }
+        
+        AuthorizationToVK()
+        
+        
+        //        if Session.shared.showLoginScreen {
+        //            setupViews()
+        //            AuthorizationToVK()
+        //        } else {
+        //            let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
+        //            let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")
+        //            self.navigationController?.pushViewController(tabbarVC, animated: false)
+        //        }
+        
+        
     }
     
     //MARK: - Private
@@ -98,8 +115,8 @@ extension AuthorizationVC: WKNavigationDelegate {
         guard let token = params["access_token"], let userId = params["user_id"], let expiresIn = params["expires_in"] else { return }
         
         Session.shared.token = token
-        Session.shared.userId = userId
-        Session.shared.expiresIn = expiresIn
+        Session.shared.userId = Int(userId) ?? 0
+        Session.shared.expiresIn = Int(expiresIn) ?? 0
         
         let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
         let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")
