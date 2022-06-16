@@ -23,16 +23,19 @@ class AuthorizationVC: UIViewController {
         
         setupViews()
         
+
         // Срабатывает только после первого включения
         
-        if Session.isValid {
 
-            let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
-            let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")
-            self.navigationController?.pushViewController(tabbarVC, animated: false)
+//        if Session.isValid {
+//            
+//            let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
+//            let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")
+//            self.navigationController?.pushViewController(tabbarVC, animated: false)
+//            
+//            return
+//        }
 
-            return
-        }
         
         AuthorizationToVK()
         
