@@ -12,36 +12,56 @@ class FriendsVC: UIViewController {
     
     @IBOutlet weak var friendsTable: UITableView!
     
-    var friends: [FriendModel] = []
+    var friendsVM = FriendsViewModel()
+    var friendsV = FriendsView()
     
-    private lazy var refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(pullToRefreshAction), for: .valueChanged)
-        return refreshControl
-    }()
+//    private lazy var refreshControl: UIRefreshControl = {
+//        let refreshControl = UIRefreshControl()
+//        refreshControl.addTarget(self, action: #selector(pullToRefreshAction), for: .valueChanged)
+//        return refreshControl
+//    }()
     
-    @objc func pullToRefreshAction() {
-        refreshControl.beginRefreshing()
-        APIManager.shared.getFriends(offset: 0) { result in
-            switch result {
-            case .success (let friends):
-                self.friends = friends
-                DispatchQueue.main.async {
-                    self.friendsTable.reloadData()
-                }
-                self.refreshControl.endRefreshing()
-            case .failure (let error):
-                self.showErrorAlert(title: error.description, message: "")
-                self.friends = []
-                self.refreshControl.endRefreshing()
-            }
-        }
-    }
+  //  @objc func pullToRefreshAction() {
+//    friendsV.onPullToRefreshAction = {
+//        friendsV.refreshControl.beginRefreshing()
+//        APIManager.shared.getFriends(offset: 0) { result in
+//            switch result {
+//            case .success (let friends):
+//                self.friendsVM.friends = friends
+//                DispatchQueue.main.async {
+//                    self.friendsTable.reloadData()
+//                }
+//                self.friendsV.refreshControl.endRefreshing()
+//            case .failure (let error):
+//                self.showErrorAlert(title: error.description, message: "")
+//                self.friendsVM.friends = []
+//                self.friendsV.refreshControl.endRefreshing()
+//            }
+//        }
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        friendsTable.refreshControl = refreshControl
+        friendsV.onPullToRefreshAction = {
+            self.friendsV.refreshControl.beginRefreshing()
+            APIManager.shared.getFriends(offset: 0) { result in
+                switch result {
+                case .success (let friends):
+                    self.friendsVM.friends = friends
+                    DispatchQueue.main.async {
+                        self.friendsTable.reloadData()
+                    }
+                    self.friendsV.refreshControl.endRefreshing()
+                case .failure (let error):
+                    self.showErrorAlert(title: error.description, message: "")
+                    self.friendsVM.friends = []
+                    self.friendsV.refreshControl.endRefreshing()
+                }
+            }
+        }
+        
+        friendsTable.refreshControl = friendsV.refreshControl
         
         //        APIManager.shared.getFriends { [weak self] friends in
         //            guard let self = self else { return }
@@ -54,13 +74,13 @@ class FriendsVC: UIViewController {
         APIManager.shared.getFriends(offset: 0) { result in
             switch result {
             case .success (let friends):
-                self.friends = friends
+                self.friendsVM.friends = friends
                 DispatchQueue.main.async {
                     self.friendsTable.reloadData()
                 }
             case .failure (let error):
                 self.showErrorAlert(title: error.description, message: "")
-                self.friends = []
+                self.friendsVM.friends = []
             }
         }
     }
@@ -70,22 +90,22 @@ class FriendsVC: UIViewController {
 extension FriendsVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(friends.count)
-        return friends.count
+        print(friendsVM.friends.count)
+        return friendsVM.friends.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! FriendTableViewCell
         
-        cell.friendName.text = String(friends[indexPath.row].firstName ?? "") + " " + String( friends[indexPath.row].lastName ?? "")
-        cell.friendImage.sd_setImage(with: URL(string: friends[indexPath.row].photo100 ?? ""))
+        cell.friendName.text = String(friendsVM.friends[indexPath.row].firstName ?? "") + " " + String(friendsVM.friends[indexPath.row].lastName ?? "")
+        cell.friendImage.sd_setImage(with: URL(string: friendsVM.friends[indexPath.row].photo100 ?? ""))
         cell.friendImage.layer.cornerRadius = 10
         cell.friendImage.layer.shadowRadius = 10
         cell.friendImage.layer.shadowOpacity = 0.5
         cell.friendImage.layer.shadowOffset = CGSize(width: 5, height: 8)
         cell.friendImage.clipsToBounds = false
-        cell.friendCity.text = String(friends[indexPath.row].city?.title ?? "")
-        if friends[indexPath.row].online == 1 || friends[indexPath.row].onlineMobile == 1 || friends[indexPath.row].onlineApp == 1 {
+        cell.friendCity.text = String(friendsVM.friends[indexPath.row].city?.title ?? "")
+        if friendsVM.friends[indexPath.row].online == 1 || friendsVM.friends[indexPath.row].onlineMobile == 1 || friendsVM.friends[indexPath.row].onlineApp == 1 {
             cell.friendOnline.text = "Online"
             cell.friendOnline.textColor = .blue
         } else {
@@ -95,8 +115,4 @@ extension FriendsVC: UITableViewDataSource {
         
         return cell
     }
-    
-    
-    
-    
 }
