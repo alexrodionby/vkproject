@@ -13,6 +13,5 @@ class FriendTableViewCell: UITableViewCell {
     @IBOutlet weak var friendName: UILabel!
     @IBOutlet weak var friendCity: UILabel!
     @IBOutlet weak var friendOnline: UILabel!
-
     
 }
