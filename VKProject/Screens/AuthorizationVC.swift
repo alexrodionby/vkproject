@@ -120,8 +120,12 @@ extension AuthorizationVC: WKNavigationDelegate {
         guard let token = params["access_token"], let userId = params["user_id"], let expiresIn = params["expires_in"] else { return }
         
         Session.shared.token = token
-        Session.shared.userId = Int(userId) ?? 0
-        Session.shared.expiresIn = Int(expiresIn) ?? 0
+        Session.shared.userId = Int(userId)
+        Session.shared.expiresIn = Int(expiresIn)
+        
+        print("Session.shared.token ", Session.shared.token)
+        print("Session.shared.userId ", Session.shared.userId)
+        print("Session.shared.expiresIn ", Session.shared.expiresIn)
         
         let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
         let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")

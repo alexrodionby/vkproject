@@ -13,32 +13,39 @@ final class Session {
     private init() {}
     static let shared = Session()
     
-    var token: String {
-        get {
-            return KeychainWrapper.standard.string(forKey: "token") ?? ""
-        }
-        set {
-            KeychainWrapper.standard.set(newValue, forKey: "token")
-        }
-    }
+    @KeychainWrapperMod(key: "token") var token: String?
     
-    var userId: Int {
-        get {
-            return UserDefaults.standard.integer(forKey: "userId")
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: "userId")
-        }
-    }
+//    var token: String {
+//        get {
+//            return KeychainWrapper.standard.string(forKey: "token") ?? ""
+//        }
+//        set {
+//            KeychainWrapper.standard.set(newValue, forKey: "token")
+//        }
+//    }
     
-    var expiresIn: Int {
-        get {
-            return UserDefaults.standard.integer(forKey: "expiresIn")
-        }
-        set {
-            UserDefaults.standard.set(newValue, forKey: "expiresIn")
-        }
-    }
+    @UserDefault(key: "userId") var userId: Int?
+    
+    
+//    var userId: Int {
+//        get {
+//            return UserDefaults.standard.integer(forKey: "userId")
+//        }
+//        set {
+//            UserDefaults.standard.set(newValue, forKey: "userId")
+//        }
+//    }
+    
+    @UserDefault(key: "expiresIn") var expiresIn: Int?
+    
+//    var expiresIn: Int {
+//        get {
+//            return UserDefaults.standard.integer(forKey: "expiresIn")
+//        }
+//        set {
+//            UserDefaults.standard.set(newValue, forKey: "expiresIn")
+//        }
+//    }
     
     static var isValid: Bool {
         
