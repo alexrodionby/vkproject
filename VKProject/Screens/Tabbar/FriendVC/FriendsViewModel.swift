@@ -8,8 +8,5 @@
 import Foundation
 
 final class FriendsViewModel {
-    
     var friends: [FriendModel] = []
-    
-    
 }

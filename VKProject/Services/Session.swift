@@ -35,33 +35,32 @@ final class Session {
 //            UserDefaults.standard.set(newValue, forKey: "userId")
 //        }
 //    }
+
+    lazy var tokenDateFormatter: DateFormatter = {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM-dd-yyyy HH:mm"
+        return dateFormatter
+    }()
     
-    @UserDefault(key: "expiresIn") var expiresIn: Int?
-    
-//    var expiresIn: Int {
-//        get {
-//            return UserDefaults.standard.integer(forKey: "expiresIn")
-//        }
-//        set {
-//            UserDefaults.standard.set(newValue, forKey: "expiresIn")
-//        }
-//    }
-    
-    static var isValid: Bool {
-        
-        var expiresIn = UserDefaults.standard.integer(forKey: "expiresIn")
-        
-        print(expiresIn)
-        
-        guard expiresIn > 0 else { return false }
-            
-        //UTC
-        var tokenDate = Date(timeIntervalSinceNow: Double(expiresIn))
-        var currentDate = Date()
-        print("tokenDate",tokenDate)
-        print("currentDate", currentDate)
-        
-        return (currentDate < tokenDate)
+    var expiresIn: String { //86400
+        get {
+            return UserDefaults.standard.string(forKey: "expiresIn") ?? ""
+        }
+        set {
+            //Объект даты -> Строковую дату
+            let tokenDate = Date(timeIntervalSinceNow: Double(newValue) ?? 0)
+            let tokenDateString = tokenDateFormatter.string(from: tokenDate)
+            UserDefaults.standard.set(tokenDateString, forKey: "expiresIn")
+        }
     }
-    var showLoginScreen: Bool = true
+    
+    var isValid: Bool {
+
+        //Строковая дата -> объект даты
+        guard let tokenDate = tokenDateFormatter.date(from: expiresIn) else { return false }
+        let currentDate = Date()
+        print("tokenDate = ",tokenDate)
+        print("currentDate = ", currentDate)
+        return currentDate < tokenDate && !token!.isEmpty
+    }
 }

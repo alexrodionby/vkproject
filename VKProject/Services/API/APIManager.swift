@@ -12,8 +12,8 @@ import Foundation
 final class APIManager {
     
     private init() {}
-    static let shared = APIManager()
-    
+    static let shared = APIManager()    
+
     //MARK: - getFriends
     
     func getFriends(offset: Int = 0, completion: @escaping (Result<[FriendModel], AppError>)->()) {
