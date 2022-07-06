@@ -12,7 +12,8 @@ enum AppError: Error {
     case noNetworkError
     case clientError
     case serverError
-    
+    case urlNotCreated
+    case unknownStatusCode
     var description: String {
         switch self {
         case .mappingError:
@@ -23,6 +24,10 @@ enum AppError: Error {
             return "Клиентская ошибка"
         case .serverError:
             return "Серверная ошибка"
+        case .urlNotCreated:
+            return "Не удалось создать URL для запроса"
+        case .unknownStatusCode:
+            return "Ошибка с неизвестным статус кодом"
         }
     }
 }

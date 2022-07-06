@@ -23,33 +23,13 @@ class AuthorizationVC: UIViewController {
         
         setupViews()
         
-
-        // Срабатывает только после первого включения
-        
-
-//        if Session.isValid {
-//            
-//            let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
-//            let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")
-//            self.navigationController?.pushViewController(tabbarVC, animated: false)
-//            
-//            return
-//        }
-
-        
-        AuthorizationToVK()
-        
-        
-        //        if Session.shared.showLoginScreen {
-        //            setupViews()
-        //            AuthorizationToVK()
-        //        } else {
-        //            let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
-        //            let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")
-        //            self.navigationController?.pushViewController(tabbarVC, animated: false)
-        //        }
-        
-        
+        if Session.shared.isValid {
+            let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
+            let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")
+            self.navigationController?.pushViewController(tabbarVC, animated: false)
+        } else {
+            AuthorizationToVK()
+        }
     }
     
     //MARK: - Private
@@ -121,7 +101,7 @@ extension AuthorizationVC: WKNavigationDelegate {
         
         Session.shared.token = token
         Session.shared.userId = Int(userId)
-        Session.shared.expiresIn = Int(expiresIn)
+        Session.shared.expiresIn = expiresIn
         
         print("Session.shared.token ", Session.shared.token)
         print("Session.shared.userId ", Session.shared.userId)

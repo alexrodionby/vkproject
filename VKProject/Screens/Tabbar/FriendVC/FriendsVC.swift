@@ -14,55 +14,67 @@ class FriendsVC: UIViewController {
     
     var friendsVM = FriendsViewModel()
     var friendsV = FriendsView()
+    var getFriendsApi = AsyncAPI()
     
-//    private lazy var refreshControl: UIRefreshControl = {
-//        let refreshControl = UIRefreshControl()
-//        refreshControl.addTarget(self, action: #selector(pullToRefreshAction), for: .valueChanged)
-//        return refreshControl
-//    }()
+    //    private lazy var refreshControl: UIRefreshControl = {
+    //        let refreshControl = UIRefreshControl()
+    //        refreshControl.addTarget(self, action: #selector(pullToRefreshAction), for: .valueChanged)
+    //        return refreshControl
+    //    }()
     
-  //  @objc func pullToRefreshAction() {
-//    friendsV.onPullToRefreshAction = {
-//        friendsV.refreshControl.beginRefreshing()
-//        APIManager.shared.getFriends(offset: 0) { result in
-//            switch result {
-//            case .success (let friends):
-//                self.friendsVM.friends = friends
-//                DispatchQueue.main.async {
-//                    self.friendsTable.reloadData()
-//                }
-//                self.friendsV.refreshControl.endRefreshing()
-//            case .failure (let error):
-//                self.showErrorAlert(title: error.description, message: "")
-//                self.friendsVM.friends = []
-//                self.friendsV.refreshControl.endRefreshing()
-//            }
-//        }
-//    }
+    //  @objc func pullToRefreshAction() {
+    //    friendsV.onPullToRefreshAction = {
+    //        friendsV.refreshControl.beginRefreshing()
+    //        APIManager.shared.getFriends(offset: 0) { result in
+    //            switch result {
+    //            case .success (let friends):
+    //                self.friendsVM.friends = friends
+    //                DispatchQueue.main.async {
+    //                    self.friendsTable.reloadData()
+    //                }
+    //                self.friendsV.refreshControl.endRefreshing()
+    //            case .failure (let error):
+    //                self.showErrorAlert(title: error.description, message: "")
+    //                self.friendsVM.friends = []
+    //                self.friendsV.refreshControl.endRefreshing()
+    //            }
+    //        }
+    //    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Это новый асинхронный запрос
+        // не забываем закончить рефрэш
         friendsV.onPullToRefreshAction = {
             self.friendsV.refreshControl.beginRefreshing()
-            APIManager.shared.getFriends(offset: 0) { result in
-                switch result {
-                case .success (let friends):
-                    self.friendsVM.friends = friends
-                    DispatchQueue.main.async {
-                        self.friendsTable.reloadData()
-                    }
-                    self.friendsV.refreshControl.endRefreshing()
-                case .failure (let error):
-                    self.showErrorAlert(title: error.description, message: "")
-                    self.friendsVM.friends = []
-                    self.friendsV.refreshControl.endRefreshing()
-                }
-            }
+            self.asyncFetchFriends(offset: 0)
+            self.friendsTable.reloadData()
+            self.friendsV.refreshControl.endRefreshing()
+            
+           // Ниже старый обычный запрос
+            
+//            APIManager.shared.getFriends(offset: 0) { result in
+//                switch result {
+//                case .success (let friends):
+//                    self.friendsVM.friends = friends
+//                    DispatchQueue.main.async {
+//                        self.friendsTable.reloadData()
+//                    }
+//                    self.friendsV.refreshControl.endRefreshing()
+//                case .failure (let error):
+//                    self.showErrorAlert(title: error.description, message: "")
+//                    self.friendsVM.friends = []
+//                    self.friendsV.refreshControl.endRefreshing()
+//                }
+//            }
         }
         
         friendsTable.refreshControl = friendsV.refreshControl
         
+        asyncFetchFriends(offset: 0)
+        
+        // Ниже старый обычный запрос
         //        APIManager.shared.getFriends { [weak self] friends in
         //            guard let self = self else { return }
         //            self.friends = friends
@@ -71,21 +83,37 @@ class FriendsVC: UIViewController {
         //            }
         //        }
         
-        APIManager.shared.getFriends(offset: 0) { result in
-            switch result {
-            case .success (let friends):
+        
+        //MARK: - Ниже код старого обычного запроса через колбэк
+        
+        //        APIManager.shared.getFriends(offset: 0) { result in
+        //            switch result {
+        //            case .success (let friends):
+        //                self.friendsVM.friends = friends
+        //                DispatchQueue.main.async {
+        //                    self.friendsTable.reloadData()
+        //                }
+        //            case .failure (let error):
+        //                self.showErrorAlert(title: error.description, message: "")
+        //                self.friendsVM.friends = []
+        //            }
+        //        }
+    }
+    
+    //MARK: - Используем новый асинхронный запрос
+    
+    private func asyncFetchFriends(offset: Int) {
+        Task {
+            do {
+                let friends = try await getFriendsApi.getFriendsAsync(offset: offset)
                 self.friendsVM.friends = friends
-                DispatchQueue.main.async {
-                    self.friendsTable.reloadData()
-                }
-            case .failure (let error):
-                self.showErrorAlert(title: error.description, message: "")
-                self.friendsVM.friends = []
+                self.friendsTable.reloadData()
+            } catch {
+                self.showErrorAlert(title: "", message: error.localizedDescription)
             }
         }
     }
 }
-
 
 extension FriendsVC: UITableViewDataSource {
     
