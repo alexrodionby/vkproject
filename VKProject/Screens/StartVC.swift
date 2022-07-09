@@ -22,7 +22,6 @@ class StartVC: UIViewController {
         let iconButton = IconTextButton(frame: CGRect(x: (view.frame.size.width - 300) / 2, y: (view.frame.height / 2) + 50, width: 300, height: 65))
         view.addSubview(iconButton)
         iconButton.configure(with: IconTextButtonViewModel(text: "Или на завод?", image: UIImage(systemName: "wrench.and.screwdriver"), backgroundColor: .systemRed))
-        
         iconButton.addTarget(self, action: #selector(tappTwoIconButton), for: .touchUpInside)
     }
     
@@ -37,6 +36,4 @@ class StartVC: UIViewController {
         print("Нажали на красную кнопку")
         view.backgroundColor = .red
     }
-    
-    
 }

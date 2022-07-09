@@ -12,7 +12,7 @@ class ZoomVC: UIViewController {
     
     @IBOutlet weak var zoomCollection: UICollectionView!
     
-    var zoomPhotos: [PhotosModel] = []
+    var zoomPhotos: [PhotosModel2] = []
     var currentIndexPath: IndexPath!
     var tempIndexPath: IndexPath!
     override func viewDidLoad() {

@@ -63,7 +63,7 @@ final class APIManager {
     
     //MARK: - getPhotos
     
-    func getPhotos(offset: Int = 0, completion: @escaping ([PhotosModel])->()) {
+    func getPhotos(offset: Int = 0, completion: @escaping ([PhotosModel2])->()) {
         
         var urlComponents: URLComponents = {
             var urlComponents = URLComponents()
@@ -98,7 +98,7 @@ final class APIManager {
             //print(data.prettyJSON as Any)
             do {
                 let photosResponse = try JSONDecoder().decode(PhotosResponse.self, from: data)
-                let photos: [PhotosModel] = photosResponse.response?.items ?? []
+                let photos: [PhotosModel2] = photosResponse.response?.items ?? []
                 DispatchQueue.main.async {
                     completion(photos)
                 }
