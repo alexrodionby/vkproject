@@ -13,20 +13,20 @@ import Foundation
 
 // MARK: - Photos
 struct PhotosResponse: Codable {
-    let response: PhotosItem?
+    let response: PhotosItem2?
 }
 
 // MARK: - Response
-struct PhotosItem: Codable {
+struct PhotosItem2: Codable {
     let count: Int?
-    let items: [PhotosModel]?
+    let items: [PhotosModel2]?
     let more: Int?
 }
 
 // MARK: - Item
-struct PhotosModel: Codable {
+struct PhotosModel2: Codable {
     let albumID, date, id, ownerID: Int?
-    let sizes: [Size]?
+    let sizes: [Size2]?
     let text: String?
     let hasTags: Bool?
     let realOffset: Int?
@@ -54,7 +54,7 @@ struct PhotosModel: Codable {
 }
 
 // MARK: - Size
-struct Size: Codable {
+struct Size2: Codable {
     let height: Int?
     let url: String?
     let type: String?

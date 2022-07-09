@@ -23,13 +23,14 @@ class AuthorizationVC: UIViewController {
         
         setupViews()
         
-        if Session.shared.isValid {
-            let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
-            let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")
-            self.navigationController?.pushViewController(tabbarVC, animated: false)
-        } else {
-            AuthorizationToVK()
-        }
+//        if Session.shared.isValid {
+//            let storyboard = UIStoryboard(name: "Tabbar", bundle: nil)
+//            let tabbarVC = storyboard.instantiateViewController(withIdentifier: "TabbarVC")
+//            self.navigationController?.pushViewController(tabbarVC, animated: false)
+//        } else {
+//            AuthorizationToVK()
+//        }
+        AuthorizationToVK()
     }
     
     //MARK: - Private
@@ -47,7 +48,8 @@ class AuthorizationVC: UIViewController {
             URLQueryItem(name: "client_id", value: "8178545"),
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
-            URLQueryItem(name: "scope", value: "262150"),
+       //   URLQueryItem(name: "scope", value: "262150"), //  скоуп не содержит доступ к новостям
+            URLQueryItem(name: "scope", value: "270342"),
             URLQueryItem(name: "response_type", value: "token"),
             URLQueryItem(name: "revoke", value: "1"),
             URLQueryItem(name: "v", value: "5.131")

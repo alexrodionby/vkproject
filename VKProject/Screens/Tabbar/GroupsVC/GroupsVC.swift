@@ -59,7 +59,4 @@ extension GroupsVC: UITableViewDataSource {
         cell.groupDiscription.text = String(groups[indexPath.row].itemDescription ?? "Нет описания")
         return cell
     }
-    
-    
-    
 }

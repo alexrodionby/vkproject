@@ -12,7 +12,6 @@ class PhotosCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var photoInCell: UIImageView!
     
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         self.layer.cornerRadius = 5
@@ -20,7 +19,5 @@ class PhotosCollectionViewCell: UICollectionViewCell {
         layer.shadowOpacity = 0.3
         layer.shadowOffset = CGSize(width: 5, height: 8)
         self.clipsToBounds = false
-        
     }
-    
 }

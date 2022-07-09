@@ -12,7 +12,7 @@ class PhotosVC: UIViewController {
     
     @IBOutlet weak var photosCollection: UICollectionView!
     
-    var photos: [PhotosModel] = []
+    var photos: [PhotosModel2] = []
     var isLoading = false
     
     override func viewDidLoad() {
@@ -29,7 +29,6 @@ class PhotosVC: UIViewController {
                 self.photosCollection.reloadData()
             }
         }
-        
     }
     
     private lazy var refreshControl: UIRefreshControl = {
@@ -49,8 +48,6 @@ class PhotosVC: UIViewController {
             self.refreshControl.endRefreshing()
         }
     }
-    
-    
 }
 
 extension PhotosVC: UICollectionViewDataSource {
@@ -69,8 +66,6 @@ extension PhotosVC: UICollectionViewDataSource {
         
         return cell
     }
-    
-    
 }
 
 extension PhotosVC: UICollectionViewDelegateFlowLayout {
