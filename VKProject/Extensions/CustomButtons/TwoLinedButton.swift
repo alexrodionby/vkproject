@@ -40,7 +40,7 @@ final class TwoLinedButton: UIButton {
         layer.cornerRadius = 8
         layer.borderWidth = 1
         layer.borderColor = UIColor.secondarySystemBackground.cgColor
-        backgroundColor = .systemBlue
+        backgroundColor = Colors.customOrange
     }
     
     required init?(coder: NSCoder) {

@@ -11,6 +11,7 @@ class StartVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         let twoLineButton = TwoLinedButton(frame: CGRect(x: 0, y: 0, width: 300, height: 65))
         view.addSubview(twoLineButton)
         twoLineButton.center = view.center
@@ -21,8 +22,19 @@ class StartVC: UIViewController {
         
         let iconButton = IconTextButton(frame: CGRect(x: (view.frame.size.width - 300) / 2, y: (view.frame.height / 2) + 50, width: 300, height: 65))
         view.addSubview(iconButton)
-        iconButton.configure(with: IconTextButtonViewModel(text: "Или на завод?", image: UIImage(systemName: "wrench.and.screwdriver"), backgroundColor: .systemRed))
+        iconButton.configure(with: IconTextButtonViewModel(text: "Или на завод?", image: UIImage(systemName: "wrench.and.screwdriver"), backgroundColor: Colors.customGreen))
         iconButton.addTarget(self, action: #selector(tappTwoIconButton), for: .touchUpInside)
+        
+        let buttonFactory = ButtonFactory()
+        let button1 = buttonFactory.button(with: .macos)
+        let button2 = buttonFactory.button(with: .windows)
+        let button3 = buttonFactory.button(with: .mobile)
+        button1.setTitle("кнопка 1")
+        button1.show()
+        button2.setTitle("кнопка 2")
+        button2.show()
+        button3.setTitle("кнопка 3")
+        button3.show()
     }
     
     @objc func tappTwoLineButton() {
