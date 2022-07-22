@@ -49,7 +49,8 @@ class AuthorizationVC: UIViewController {
             URLQueryItem(name: "display", value: "mobile"),
             URLQueryItem(name: "redirect_uri", value: "https://oauth.vk.com/blank.html"),
        //   URLQueryItem(name: "scope", value: "262150"), //  скоуп не содержит доступ к новостям
-            URLQueryItem(name: "scope", value: "270342"),
+      //    URLQueryItem(name: "scope", value: "270342"),
+            URLQueryItem(name: "scope", value: "270358"),
             URLQueryItem(name: "response_type", value: "token"),
             URLQueryItem(name: "revoke", value: "1"),
             URLQueryItem(name: "v", value: "5.131")
