@@ -40,8 +40,19 @@ class ProfileVC: UIViewController {
             }
         }
         
+        let videoButton = IconTextButton(frame: CGRect(x: 0, y: 0, width: 330, height: 65))
+        view.addSubview(videoButton)
+        videoButton.center = view.center
+        videoButton.configure(with: IconTextButtonViewModel(text: "Посмотрим смешные видео?", image: UIImage(systemName: "questionmark.video"), backgroundColor: Colors.customGreen))
+        videoButton.addTarget(self, action: #selector(tappVideoButton), for: .touchUpInside)
         
-        
+    }
+    
+    @objc func tappVideoButton() {
+        print("Нажали на видео кнопку")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let VideoVC = storyboard.instantiateViewController(withIdentifier: "VideoVC")
+        self.navigationController?.pushViewController(VideoVC, animated: true)
     }
     
 }

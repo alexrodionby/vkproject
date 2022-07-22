@@ -14,7 +14,7 @@ class FriendsVC: UIViewController {
     
     var friendsVM = FriendsViewModel()
     var friendsV = FriendsView()
-    var getFriendsApi = AsyncAPI()
+    var getFriendsApi = AsyncFriendsAPI()
     
     //    private lazy var refreshControl: UIRefreshControl = {
     //        let refreshControl = UIRefreshControl()

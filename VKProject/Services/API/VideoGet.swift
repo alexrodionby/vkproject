@@ -1,29 +1,28 @@
 //
-//  FriendsGet.swift
+//  VideoGet.swift
 //  VKProject
 //
-//  Created by Alexandr Rodionov on 5.07.22.
+//  Created by Alexandr Rodionov on 19.07.22.
 //
 
 import Foundation
 
 //MARK: - Async Recuest getFriendsAsync
-class AsyncFriendsAPI {
+class AsyncVideoAPI {
     
-    func getFriendsAsync(offset: Int = 0) async throws -> [FriendModel] {
+    func getVideoAsync(offset: Int = 0) async throws -> [VideoModel] {
         var urlComponents: URLComponents = {
             var urlComponents = URLComponents()
             urlComponents.scheme = "https"
             urlComponents.host = "api.vk.com"
-            urlComponents.path = "/method/friends.get"
+            urlComponents.path = "/method/video.get"
             return urlComponents
         }()
         
         urlComponents.queryItems = [
-            URLQueryItem(name: "user_id", value: "\(Session.shared.userId!)"),
-            URLQueryItem(name: "order", value: "random"),
-            URLQueryItem(name: "count", value: "20"),
-            URLQueryItem(name: "fields", value: "online,city,photo_100"),
+            URLQueryItem(name: "user_id", value: "-63758929"),
+         //   URLQueryItem(name: "user_id", value: "2056199"),
+            URLQueryItem(name: "count", value: "50"),
             URLQueryItem(name: "offset", value: "\(offset)"),
             URLQueryItem(name: "access_token", value: Session.shared.token),
             URLQueryItem(name: "v", value: "5.131")
@@ -51,10 +50,10 @@ class AsyncFriendsAPI {
                     throw AppError.unknownStatusCode
                 }
             }
-            
-            let friendsResponse = try JSONDecoder().decode(FriendsResponse.self, from: data)
-            let friends: [FriendModel] = friendsResponse.response?.items ?? []
-            return friends
+      //      print(data.prettyJSON as Any)
+            let videoResponse = try JSONDecoder().decode(VideoResponse.self, from: data)
+            let video: [VideoModel] = videoResponse.response?.items ?? []
+            return video
             
         } catch {
             print(error)
