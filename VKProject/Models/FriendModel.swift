@@ -12,6 +12,12 @@
 import Foundation
 
 // MARK: - Friends
+
+// Это как бы подмена FriendsResponse. И так и так можно будет обращаться.
+struct BaseResponse<T: Codable>: Codable {
+    let response: T
+}
+
 struct FriendsResponse: Codable {
     let response: FriendsItems?
 }
@@ -33,7 +39,7 @@ struct FriendModel: Codable {
     let canAccessClosed, isClosed: Bool?
     let lists: [Int]?
     let onlineMobile, onlineApp: Int?
-
+    
     enum CodingKeys: String, CodingKey {
         case id, city
         case trackCode = "track_code"

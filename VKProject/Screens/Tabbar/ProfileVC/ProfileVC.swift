@@ -24,7 +24,7 @@ class ProfileVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+   
         APIManager.shared.getUser { [weak self] users in
             guard let self = self else { return }
             self.users = users

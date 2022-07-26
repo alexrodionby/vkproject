@@ -16,6 +16,20 @@ final class APIManager {
 
     //MARK: - getFriends
     
+    // Новый нетворкслой асинковский запрос на поиск групп
+    func searchFriends(searchString: String) async throws -> [FriendModel]  {
+        
+        do {
+            let response = try await API.request(endpoint: FriendsEndpoint.searchFriends(searchString: searchString), responseModel: FriendsItems.self)
+ 
+            return response.items ?? []
+        } catch {
+            print(error)
+            throw error
+        }
+    }
+    
+    // Обычный запрос с комплишеном
     func getFriends(offset: Int = 0, completion: @escaping (Result<[FriendModel], AppError>)->()) {
         
         var urlComponents: URLComponents = {
@@ -197,8 +211,30 @@ final class APIManager {
         session.resume()
     }
     
+    // Новый нетворкслой асинковский запрос на вывод групп
+    func fetchGroups(offset: Int = 0) async throws -> [GroupDAO]  {
+        
+        do {
+            let response = try await API.request(endpoint: GroupsEndpoint.fetchGroups(offset: offset), responseModel: GroupsItem.self)
+ 
+            return response.items ?? []
+        } catch {
+            print(error)
+            throw error
+        }
+    }
     
-    
-    
+    // Новый нетворкслой асинковский запрос на поиск групп
+    func searchGroups(searchString: String) async throws -> [GroupDAO]  {
+        
+        do {
+            let response = try await API.request(endpoint: GroupsEndpoint.searchGroups(searchString: searchString), responseModel: GroupsItem.self)
+ 
+            return response.items ?? []
+        } catch {
+            print(error)
+            throw error
+        }
+    }
 }
 //MARK: - END

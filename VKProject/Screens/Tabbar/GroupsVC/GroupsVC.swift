@@ -12,12 +12,18 @@ import RealmSwift
 class GroupsVC: UIViewController {
     
     @IBOutlet weak var groupsTable: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var groups: [GroupDAO] = []
     var groupsDatabase = GroupsDB()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        searchBar.delegate = self
+        
+        // Скрываем клавиатуру по тапу в пустом месте
+        let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing))
+        view.addGestureRecognizer(tap)
         
         let groupsFromDB = Array(groupsDatabase.fetch())
         
@@ -26,16 +32,27 @@ class GroupsVC: UIViewController {
             self.groupsTable.reloadData()
             
         } else {
-            
-            APIManager.shared.getGroups { [weak self] groups in
-                guard let self = self else { return }
-                self.groups = groups
-                self.groupsDatabase.save(groups)
-                DispatchQueue.main.async {
-                    print("Релоадит дату в таблице")
+            // Новый запрос из нетворкслоя асинковский
+            Task {
+                do {
+                    self.groups = try await APIManager.shared.fetchGroups()
                     self.groupsTable.reloadData()
+                } catch {
+                    self.showErrorAlert(title: "Ошибка", message: error.localizedDescription)
                 }
             }
+            
+            
+            // Обычный старый запрос
+            //            APIManager.shared.getGroups { [weak self] groups in
+            //                guard let self = self else { return }
+            //                self.groups = groups
+            //                self.groupsDatabase.save(groups)
+            //                DispatchQueue.main.async {
+            //                    print("Релоадит дату в таблице")
+            //                    self.groupsTable.reloadData()
+            //                }
+            //            }
         }
     }
 }
@@ -43,7 +60,7 @@ class GroupsVC: UIViewController {
 extension GroupsVC: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("Сколько строк в таблице = ", groups.count)
+      //  print("Сколько строк в таблице = ", groups.count)
         return groups.count
     }
     
@@ -58,5 +75,30 @@ extension GroupsVC: UITableViewDataSource {
         cell.groupSite.text = String(groups[indexPath.row].site ?? "Нет сайта")
         cell.groupDiscription.text = String(groups[indexPath.row].itemDescription ?? "Нет описания")
         return cell
+    }
+}
+
+extension GroupsVC: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText == "" {
+            Task {
+                do {
+                    self.groups = try await APIManager.shared.fetchGroups()
+                    self.groupsTable.reloadData()
+                } catch {
+                    self.showErrorAlert(title: "Ошибка", message: error.localizedDescription)
+                }
+            }
+        } else {
+            print("Вводим текст =", searchText)
+            Task {
+                do {
+                    self.groups = try await APIManager.shared.searchGroups(searchString: searchText)
+                    self.groupsTable.reloadData()
+                } catch {
+                    self.showErrorAlert(title: "Ошибка", message: error.localizedDescription)
+                }
+            }
+        }
     }
 }
